@@ -51,19 +51,21 @@ class Driver:
         time.sleep(0.01)
         bus.write_byte_data(self.address, 0x00, 0xA0)      # Set Auto-Increment on, enable restart
 
-   def setPWM(self, channel, duration):
-      bus.write_byte_data(self.address, 0x06+(4*channel), 0x00)
-      bus.write_byte_data(self.address, 0x07+(4*channel), 0x00)
-      bus.write_byte_data(self.address, 0x08+(4*channel), duration & 0xFF)
-      bus.write_byte_data(self.address, 0x09+(4*channel), duration >> 8) 
+    def setPWM(self, channel, duration):
+        bus.write_byte_data(self.address, 0x06+(4*channel), 0x00)
+        bus.write_byte_data(self.address, 0x07+(4*channel), 0x00)
+        bus.write_byte_data(self.address, 0x08+(4*channel), duration & 0xFF)
+        bus.write_byte_data(self.address, 0x09+(4*channel), duration >> 8) 
 
 # Create an instance of PWMServo class
 driver = Driver(0x60)
-driver.setFreq(100)
+driver.setFreq(20000)
 
+driver.setPWM(1, 4095)
+i=0
 while (True):
-   # Set servos 0,1,2 using standard pulse length
-   driver.setPWM(0, 1024)
-   driver.setPWM(1, 4096)
-   time.sleep(2)
-   driver.setPWM(0, 2048)
+    if i > 4096:
+        i = 0
+    driver.setPWM(0, i)
+    time.sleep(0.01)
+    i+=1
