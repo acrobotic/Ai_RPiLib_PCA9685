@@ -53,11 +53,16 @@ class Driver:
         prescale -= 1.0
         prescale8 = int(math.floor(prescale + 0.5))
         self.setLowPowerMode(True)
-        #self.setExtClock(True)
         bus.write_byte_data(self.address, REG_PRESC, prescale8) # set the prescaler
         self.setLowPowerMode(False)
         time.sleep(0.01)
         bus.write_byte_data(self.address, REG_MODE1, 0xA0)      # Set Auto-Increment on, enable restart
+
+    def setExtClock:
+        self.setLowPowerMode(True)
+        self.setExtClock(True)
+        self.setLowPowerMode(False)
+        bus.write_byte_data(self.address, REG_MODE1, 0x80)      # Set enable restart
 
     def setPWM(self, channel, off_count, on_count=0x00):
         bus.write_byte_data(self.address, REG_LED0_ON_L+(4*channel), on_count & 0xFF)
