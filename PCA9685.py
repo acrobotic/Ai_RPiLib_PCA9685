@@ -114,14 +114,14 @@ if __name__ == '__main__':
     pwm_2 = driver.CHANNEL_1
 
     try:
-        while True:
-            driver.setOn(pwm_1)
-            driver.setPWM(pwm_2, 2048)
-            time.sleep(2)
-            driver.setOff(pwm_1)
-            driver.setPWM(pwm_2, 4095)
-            time.sleep(2)
-            driver.setAllOff()
+       # while True:
+        driver.setOn(pwm_1)
+        driver.setPWM(pwm_2, 4095)
+        time.sleep(60)
+            #driver.setOff(pwm_1)
+            #driver.setPWM(pwm_2, 4095)
+            #time.sleep(10)
+            #driver.setAllOff()
     except KeyboardInterrupt:
         print "Turning Off All Channels...!"
     finally:
