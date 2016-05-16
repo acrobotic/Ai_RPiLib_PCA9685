@@ -28,7 +28,7 @@ REG_LEDALL_OFF_L    = 0xFC
 REG_LEDALL_OFF_H    = 0xFD
 
 # Define a class for our servo functions
-class Driver:
+class PCA9685(object):
     CHANNEL_0  = 0
     CHANNEL_1  = 1
     CHANNEL_2  = 2
@@ -79,7 +79,7 @@ class Driver:
         bus.write_byte_data(self.address, REG_PRESC, prescale8) # set the prescaler
         self.setLowPowerMode(False)
         time.sleep(0.01)
-        bus.write_byte_data(self.address, REG_MODE1, 0xA0)      # Set Auto-Increment on, enable restart
+        bus.write_byte_data(self.address, REG_MODE1, 0xA0)      # Set auto-increment on, enable restart, all call
 
     def setExtClock(self):
         self.setLowPowerMode(True)
@@ -105,9 +105,12 @@ class Driver:
         bus.write_byte_data(self.address, REG_LEDALL_ON_H, 0x00)
         bus.write_byte_data(self.address, REG_LEDALL_OFF_H, 0x10)
 
+    def cleanup(self):
+        GPIO.cleanup()
+
 if __name__ == '__main__':
     # Create an instance of PWM Driver class
-    driver = Driver(I2C_ADDR)
+    driver = PCA9685(I2C_ADDR)
     driver.setFreq(1000)
 
     pwm_1 = driver.CHANNEL_0
@@ -120,8 +123,6 @@ if __name__ == '__main__':
             time.sleep(2)
             driver.setOff(pwm_1)
             driver.setPWM(pwm_2, 4095)
-            time.sleep(2)
-            driver.setAllOff()
     except KeyboardInterrupt:
         print "Turning Off All Channels...!"
     finally:
